@@ -85,10 +85,18 @@ public class UserPage {
         transferPanel.add(transferButton);
 
         // button functionality
-        depositButton.addActionListener(e -> JOptionPane.showMessageDialog(frame, "Deposit here"));
-        withdrawButton.addActionListener(e -> JOptionPane.showMessageDialog(frame, "Withdraw here"));
-        transferButton.addActionListener(e -> JOptionPane.showMessageDialog(frame, "Transfer here"));
-
+        depositButton.addActionListener(e -> {
+            frame.dispose(); // close current window
+            //new DepositPage(currentUser); // call deposit class to open window
+        });
+        withdrawButton.addActionListener(e -> {
+            frame.dispose();
+            //new WithdrawPage(currentUser); //rename
+        });
+        transferButton.addActionListener(e -> {
+            frame.dispose();
+            new TransferHandler(currentUser);
+        });
         panel.add(Box.createRigidArea(new Dimension(0, 10)));
         panel.add(greeting);
         panel.add(Box.createRigidArea(new Dimension(0, 10)));
