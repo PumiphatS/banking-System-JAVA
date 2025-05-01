@@ -110,17 +110,4 @@ public class UserPage {
         frame.add(panel);
         frame.setVisible(true);
     }
-
-    // user class to hold balance info
-    private static class User {
-        String username;
-        double checkingBalance;
-        double savingsBalance;
-
-        public User(String username, double checkingBalance, double savingsBalance) {
-            this.username = username;
-            this.checkingBalance = checkingBalance;
-            this.savingsBalance = savingsBalance;
-        }
-    }
 }
