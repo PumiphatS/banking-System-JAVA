@@ -13,7 +13,7 @@ public class UserPage {
 
     public static void main(String[] args) {
         
-        loadUserBalances("C:\\Users\\cjbyr\\OneDrive - Indiana University\\Desktop\\CS\\Final Project User Log in\\user.csv"); // load balances from CSV
+        loadUserBalances("user.csv"); // load balances from CSV
 
         if (!userBalances.isEmpty()) {
             currentUser = userBalances.values().iterator().next(); // get the first User object
