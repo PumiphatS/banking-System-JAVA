@@ -28,7 +28,7 @@ public class UserPage {
         }
     }
 
-    // load balances from user.csv (columns: username [0], password [1], checking [5], savings [6])
+    // load balances from user.csv (columns: username [0], checking [5], savings [6])
     private static void loadUserBalances(String filename) {
         try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
             String line;
