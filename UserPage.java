@@ -9,21 +9,22 @@ public class UserPage {
     private static Map<String, User> userBalances = new HashMap<>();
 
     // currently selected user (manually set below)
-    private static User currentUser = null;
+    private static User currentUser = null; // null because user hasn't been selected yet
 
     public static void main(String[] args) {
+        // test with hardcoded username
+        launchForUser("user"); // Replace "user" with a username from the csv
+    }
         
-        loadUserBalances("user.csv"); // load balances from CSV
+    public static void launchForUser(String selectedUsername) {
+        loadUserBalances("user.csv"); // loads user.csv data
+        currentUser = userBalances.get(selectedUsername); // store user in currentUser, then opens GUI
 
-        if (!userBalances.isEmpty()) {
-            currentUser = userBalances.values().iterator().next(); // get the first User object
-        }
-        
-
+        // error if user not found
         if (currentUser != null) {
             showMainMenu();
         } else {
-            JOptionPane.showMessageDialog(null, "User not found.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "User not found: " + selectedUsername, "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -51,7 +52,7 @@ public class UserPage {
         JFrame frame = new JFrame("Banking Options"); // window title
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(400, 300);
-        frame.setLocationRelativeTo(null);
+        frame.setLocationRelativeTo(null); // window is centered
 
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
@@ -59,6 +60,7 @@ public class UserPage {
         JLabel greeting = new JLabel("What would you like to do?");
         greeting.setAlignmentX(Component.CENTER_ALIGNMENT);
 
+        // display user checking and savings balance
         JLabel checkingLabel = new JLabel("Checking Balance: $" + currentUser.checkingBalance); // from column 6
         JLabel savingsLabel = new JLabel("Savings Balance: $" + currentUser.savingsBalance); // from column 7
         checkingLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -109,5 +111,5 @@ public class UserPage {
 
         frame.add(panel);
         frame.setVisible(true);
-    }
+    } 
 }
