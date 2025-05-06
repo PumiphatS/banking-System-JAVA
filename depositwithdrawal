@@ -1,0 +1,61 @@
+// deposit
+public class DepositPanel extends javax.swing.JFrame {
+    private User currentUser; // Add this line
+
+    public DepositPanel(User user) {
+        this.currentUser = user; // Store user
+        initComponents();
+    }
+
+    // Then inside ConfirmButtonActionPerformed:
+    private void ConfirmButtonActionPerformed(java.awt.event.ActionEvent evt) {
+        String input = AmountField.getText().trim();
+        if (input.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter an amount.");
+            return;
+        }
+
+        try {
+            double depositAmount = Double.parseDouble(input);
+            if (depositAmount <= 0) {
+                JOptionPane.showMessageDialog(this, "Invalid deposit amount.");
+                return;
+            }
+
+            currentUser.setCheckingBalance(currentUser.getCheckingBalance() + depositAmount); // Update balance
+            JOptionPane.showMessageDialog(this, "Deposit successful!");
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Invalid input.");
+        }
+    }
+}
+
+// withdraw
+public class WithdrawPanel extends javax.swing.JFrame {
+    private User currentUser;
+
+    public WithdrawPanel(User user) {
+        this.currentUser = user;
+        initComponents();
+    }
+
+    // Add action handling to WithdrawConfirmButton
+    // For example:
+    private void WithdrawConfirmButtonActionPerformed(java.awt.event.ActionEvent evt) {
+        try {
+            double withdrawAmount = Double.parseDouble(WithdrawAmountField.getText().trim());
+            if (withdrawAmount <= 0) {
+                JOptionPane.showMessageDialog(this, "Invalid withdraw amount.");
+                return;
+            }
+            if (currentUser.getCheckingBalance() >= withdrawAmount) {
+                currentUser.setCheckingBalance(currentUser.getCheckingBalance() - withdrawAmount);
+                JOptionPane.showMessageDialog(this, "Withdrawal successful.");
+            } else {
+                JOptionPane.showMessageDialog(this, "Insufficient funds.");
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Invalid input.");
+        }
+    }
+}
