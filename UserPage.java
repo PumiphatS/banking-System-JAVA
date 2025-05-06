@@ -33,17 +33,17 @@ public class UserPage {
             String line;
             br.readLine(); // skip header
             while ((line = br.readLine()) != null) {
-                String[] column = line.split(",", -1); // -1 to preserve empty fields
+                String[] column = line.split(",", -1); // -1 so data isn't lost, keeps 7 columns
                 if (column.length >= 7) {
                     String username = column[0];
                     String password = column[1];
-                    String field3 = column[2];
-                    String field4 = column[3];
-                    String field5 = column[4];
+                    String firstName = column[2];
+                    String lastName = column[3];
+                    String accountNumber = column[4];
                     double checkingBalance = Double.parseDouble(column[5]);
                     double savingsBalance = Double.parseDouble(column[6]);
 
-                    userBalances.put(username, new User(username, password, field3, field4, field5, checkingBalance, savingsBalance));
+                    userBalances.put(username, new User(username, password, firstName, lastName, accountNumber, checkingBalance, savingsBalance));
                 }
             }
         } catch (IOException | NumberFormatException e) {
@@ -125,15 +125,15 @@ public class UserPage {
     // save user balances to csv
     public static void saveUserBalances(String filename) {
         try (PrintWriter writer = new PrintWriter(new FileWriter(filename))) {
-            writer.println("username,password,field3,field4,field5,checking,savings");
+            writer.println("username,password,firstName,lastName,accountNumber,checking,savings");
 
             for (User user : userBalances.values()) {
                 writer.printf("%s,%s,%s,%s,%s,%.2f,%.2f%n",
                         user.getUsername(),
                         user.getPassword(),
-                        user.getField3(),
-                        user.getField4(),
-                        user.getField5(),
+                        user.getFirstName(),
+                        user.getLastName(),
+                        user.getAccountNumber(),
                         user.getCheckingBalance(),
                         user.getSavingsBalance());
             }
