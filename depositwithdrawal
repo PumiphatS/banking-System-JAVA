@@ -106,7 +106,6 @@ public class WithdrawPanel extends JFrame {
 
     public WithdrawPanel(User user) {
         this.currentUser = user;
-        UserPage.currentUser = user; // <-- set for saving
         initComponents();
     }
 
@@ -137,8 +136,10 @@ public class WithdrawPanel extends JFrame {
 
         add(panel);
 
+        // Update balance label when account selection changes
         accountDropdown.addActionListener(e -> {
-            updateBalanceLabel((String) accountDropdown.getSelectedItem());
+            String selectedAccount = (String) accountDropdown.getSelectedItem();
+            updateBalanceLabel(selectedAccount);
         });
 
         confirmButton.addActionListener(e -> {
@@ -155,9 +156,13 @@ public class WithdrawPanel extends JFrame {
                 if (amount <= 0) {
                     JOptionPane.showMessageDialog(this, "Amount must be greater than 0.");
                     return;
+                } else if (amount > 10000) {
+                    JOptionPane.showMessageDialog(this, "Cannot withdraw more than 10,000 at a time.");
+                    return;
                 }
 
                 boolean success = false;
+
                 if (selectedAccount.equals("Checking")) {
                     if (currentUser.getCheckingBalance() >= amount) {
                         currentUser.setCheckingBalance(currentUser.getCheckingBalance() - amount);
@@ -171,7 +176,7 @@ public class WithdrawPanel extends JFrame {
                 }
 
                 if (success) {
-                    UserPage.saveUserBalances("src/user.csv");
+                    UserPage.saveCurrentUser("src/user.csv");
                     JOptionPane.showMessageDialog(this, "Withdrawal successful!");
                     amountField.setText("");
                     updateBalanceLabel(selectedAccount);
@@ -198,4 +203,5 @@ public class WithdrawPanel extends JFrame {
         }
     }
 }
+
 
