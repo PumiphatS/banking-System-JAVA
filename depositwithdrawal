@@ -76,13 +76,7 @@ public class DepositPanel extends JFrame {
 }
 
 
-
-
-
-
-//
-
-
+//withdraw
 
 import javax.swing.*;
 
