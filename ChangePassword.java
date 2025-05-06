@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package finalproject;
+
 
 
 // Swing Components
@@ -207,7 +207,7 @@ public class ChangePassword extends javax.swing.JFrame {
 
         // Update password in the banker.csv file
         try {
-            String filePath = role.equalsIgnoreCase("user") ? "user.csv" : "banker.csv";
+            String filePath = role.equalsIgnoreCase("user") ? "src/user.csv" : "src/banker.csv";
             File file = new File(filePath);
             List<String> updatedLines = new ArrayList<>();
             Scanner scanner = new Scanner(file);
