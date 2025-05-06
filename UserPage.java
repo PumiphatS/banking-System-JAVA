@@ -61,8 +61,8 @@ public class UserPage {
         greeting.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // display user checking and savings balance
-        JLabel checkingLabel = new JLabel("Checking Balance: $" + currentUser.checkingBalance); // from column 6
-        JLabel savingsLabel = new JLabel("Savings Balance: $" + currentUser.savingsBalance); // from column 7
+        JLabel checkingLabel = new JLabel("Checking Balance: $" + currentUser.getCheckingBalance()); // from column 6
+        JLabel savingsLabel = new JLabel("Savings Balance: $" + currentUser.getSavingsBalance()); // from column 7
         checkingLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         savingsLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
