@@ -144,7 +144,7 @@ public class UserPage {
                             currentUser.getAccountNumber(),
                             currentUser.getCheckingBalance(),
                             currentUser.getSavingsBalance()
-                            currentuser.getEmail();
+                            currentUser.getEmail();
                     );
                     updatedContent.append(updatedLine).append("\n");
                 } else {
