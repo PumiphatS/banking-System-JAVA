@@ -69,7 +69,7 @@ public class DepositPanel extends JFrame {
                     currentUser.setSavingsBalance(currentUser.getSavingsBalance() + amount);
                 }
 
-                UserPage.saveUserBalances("src/user.csv");
+                UserPage.saveCurrentUser("src/user.csv");
                 JOptionPane.showMessageDialog(this, "Deposit successful!");
                 amountField.setText("");
                 updateBalanceLabel(selectedAccount);
