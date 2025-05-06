@@ -135,16 +135,17 @@ public class UserPage {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] column = line.split(",", -1);
-                if (column.length >= 7 && column[0].equals(currentUser.getUsername())) {
+                if (column.length >= 8 && column[0].equals(currentUser.getUsername())) {
                     // Rewrite only this user's line
                     String updatedLine = String.format("%s,%s,%s,%s,%s,%.2f,%.2f",
                             currentUser.getUsername(),
                             currentUser.getPassword(),
-                            currentUser.getField3(),
-                            currentUser.getField4(),
-                            currentUser.getField5(),
+                            currentUser.getFirstName(),
+                            currentUser.getLastName(),
+                            currentUser.getAccountNumber(),
                             currentUser.getCheckingBalance(),
                             currentUser.getSavingsBalance()
+                            currentuser.getEmail();
                     );
                     updatedContent.append(updatedLine).append("\n");
                 } else {
