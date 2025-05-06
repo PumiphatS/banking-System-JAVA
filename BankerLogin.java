@@ -4,33 +4,22 @@
  */
 package finalproject;
 
-
-// Swing Components
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
-
-// File Handling
-import java.io.File;
-import java.io.FileWriter;
+import javax.swing.JOptionPane;
+import java.util.*;
 import java.io.IOException;
-import java.util.Scanner;
-import java.util.List;
-import java.util.ArrayList;
+import java.io.File;
+
+
 /**
  *
  * @author pumiphatsukkho
  */
-public class ChangePassword extends javax.swing.JFrame {
-    private String bankerEmail;
-    private String role;
+public class BankerLogin extends javax.swing.JFrame {
 
     /**
-     * Creates new form ChangePassword
+     * Creates new form Login
      */
-    public ChangePassword(String bankerEmail, String role) {
-        this.bankerEmail = bankerEmail; // บันทึกอีเมลไว้ในตัวแปร
-        this.role = role;
+    public BankerLogin() {
         initComponents();
         setLocationRelativeTo(null);
     }
@@ -45,214 +34,287 @@ public class ChangePassword extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
-        jPanel3 = new javax.swing.JPanel();
+        Right = new javax.swing.JPanel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        Left = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        newPasswordField = new javax.swing.JTextField();
+        usernameField = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        confirmPasswordField = new javax.swing.JTextField();
-        resetButton = new javax.swing.JButton();
+        passwordField = new javax.swing.JPasswordField();
+        loginButton = new javax.swing.JButton();
+        backButton = new javax.swing.JButton();
+        backButton1 = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Success");
-        setPreferredSize(new java.awt.Dimension(800, 500));
+        setTitle("LOGIN");
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setPreferredSize(new java.awt.Dimension(800, 500));
         jPanel1.setLayout(null);
 
-        jPanel2.setBackground(new java.awt.Color(0, 102, 102));
-        jPanel2.setPreferredSize(new java.awt.Dimension(400, 500));
+        Right.setBackground(new java.awt.Color(0, 102, 102));
+        Right.setSize(new java.awt.Dimension(400, 500));
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel4.setIcon(new javax.swing.ImageIcon("/Users/pumiphatsukkho/NetBeansProjects/FinalProject/Icon/logo.png")); // NOI18N
+
+        jLabel5.setFont(new java.awt.Font("Srisakdi", 1, 36)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel5.setText("Welcome Banker");
+
+        jLabel6.setText("© 2025 TwistBank Corporation. All rights reserved.");
+
+        javax.swing.GroupLayout RightLayout = new javax.swing.GroupLayout(Right);
+        Right.setLayout(RightLayout);
+        RightLayout.setHorizontalGroup(
+            RightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(RightLayout.createSequentialGroup()
+                .addGroup(RightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(RightLayout.createSequentialGroup()
+                        .addGap(147, 147, 147)
+                        .addComponent(jLabel4))
+                    .addGroup(RightLayout.createSequentialGroup()
+                        .addGap(57, 57, 57)
+                        .addComponent(jLabel5))
+                    .addGroup(RightLayout.createSequentialGroup()
+                        .addGap(48, 48, 48)
+                        .addComponent(jLabel6)))
+                .addContainerGap(57, Short.MAX_VALUE))
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 500, Short.MAX_VALUE)
+        RightLayout.setVerticalGroup(
+            RightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(RightLayout.createSequentialGroup()
+                .addGap(80, 80, 80)
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 205, Short.MAX_VALUE)
+                .addComponent(jLabel6)
+                .addGap(24, 24, 24))
         );
 
-        jPanel1.add(jPanel2);
-        jPanel2.setBounds(0, 0, 400, 500);
+        jPanel1.add(Right);
+        Right.setBounds(0, 0, 400, 500);
 
-        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel3.setPreferredSize(new java.awt.Dimension(400, 500));
+        Left.setBackground(new java.awt.Color(255, 255, 255));
+        Left.setMinimumSize(new java.awt.Dimension(400, 500));
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 30)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 102, 102));
-        jLabel1.setText("Create New Password");
+        jLabel1.setText("LOGIN");
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
-        jLabel2.setText("New Password");
+        jLabel2.setText("Username");
 
-        newPasswordField.addActionListener(new java.awt.event.ActionListener() {
+        usernameField.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
+        usernameField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                newPasswordFieldActionPerformed(evt);
+                usernameFieldActionPerformed(evt);
             }
         });
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
-        jLabel3.setText("Confirm Password");
+        jLabel3.setText("Password");
 
-        confirmPasswordField.addActionListener(new java.awt.event.ActionListener() {
+        passwordField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                confirmPasswordFieldActionPerformed(evt);
+                passwordFieldActionPerformed(evt);
             }
         });
 
-        resetButton.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
-        resetButton.setText("Reset Password");
-        resetButton.addActionListener(new java.awt.event.ActionListener() {
+        loginButton.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
+        loginButton.setText("Login");
+        loginButton.setPreferredSize(new java.awt.Dimension(90, 35));
+        loginButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                resetButtonActionPerformed(evt);
+                loginButtonActionPerformed(evt);
             }
         });
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(36, Short.MAX_VALUE)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel1)
-                    .addComponent(newPasswordField, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3)
-                    .addComponent(confirmPasswordField, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(resetButton))
-                .addGap(33, 33, 33))
+        backButton.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
+        backButton.setText("Back");
+        backButton.setPreferredSize(new java.awt.Dimension(90, 35));
+        backButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backButtonActionPerformed(evt);
+            }
+        });
+
+        backButton1.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        backButton1.setText("Click");
+        backButton1.setPreferredSize(new java.awt.Dimension(90, 35));
+        backButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backButton1ActionPerformed(evt);
+            }
+        });
+
+        jLabel7.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        jLabel7.setText("Forgot Password?");
+
+        javax.swing.GroupLayout LeftLayout = new javax.swing.GroupLayout(Left);
+        Left.setLayout(LeftLayout);
+        LeftLayout.setHorizontalGroup(
+            LeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(LeftLayout.createSequentialGroup()
+                .addGroup(LeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(LeftLayout.createSequentialGroup()
+                        .addGap(139, 139, 139)
+                        .addComponent(jLabel1))
+                    .addGroup(LeftLayout.createSequentialGroup()
+                        .addGap(41, 41, 41)
+                        .addGroup(LeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(LeftLayout.createSequentialGroup()
+                                .addComponent(jLabel7)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(backButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(LeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, LeftLayout.createSequentialGroup()
+                                    .addComponent(backButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(loginButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(passwordField, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(usernameField, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, LeftLayout.createSequentialGroup()
+                                    .addGroup(LeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jLabel2)
+                                        .addComponent(jLabel3))
+                                    .addGap(266, 266, 266))))))
+                .addContainerGap(24, Short.MAX_VALUE))
         );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(57, 57, 57)
+        LeftLayout.setVerticalGroup(
+            LeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(LeftLayout.createSequentialGroup()
+                .addGap(67, 67, 67)
                 .addComponent(jLabel1)
-                .addGap(44, 44, 44)
+                .addGap(38, 38, 38)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(newPasswordField, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(32, 32, 32)
+                .addComponent(usernameField, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(confirmPasswordField, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27)
-                .addComponent(resetButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(136, Short.MAX_VALUE))
+                .addComponent(passwordField, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(LeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(backButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7))
+                .addGap(33, 33, 33)
+                .addGroup(LeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(loginButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(backButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(110, Short.MAX_VALUE))
         );
 
-        jPanel1.add(jPanel3);
-        jPanel3.setBounds(400, 0, 400, 500);
+        jPanel1.add(Left);
+        Left.setBounds(400, 0, 400, 500);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 494, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
-        pack();
+        setBounds(0, 0, 800, 522);
     }// </editor-fold>                        
 
-    private void resetButtonActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        String newPassword = newPasswordField.getText().trim();  
-        String confirmPassword = confirmPasswordField.getText().trim();
-        
+    private void usernameFieldActionPerformed(java.awt.event.ActionEvent evt) {                                              
+        String inputUsername = usernameField.getText();
+    }                                             
 
-        if (newPassword.isEmpty() || confirmPassword.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Please fill in both password fields.");
-            return;
-        }
+    private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {                                            
+        String inputUsername = usernameField.getText();
+        String inputPassword = new String(passwordField.getPassword());
+        boolean loginSuccess = false;
 
-        if (!newPassword.equals(confirmPassword)) {
-            JOptionPane.showMessageDialog(this, "Passwords do not match.");
-            return;
-        }
-
-        // Update password in the banker.csv file
         try {
-            String filePath = role.equalsIgnoreCase("user") ? "user.csv" : "banker.csv";
-            File file = new File(filePath);
-            List<String> updatedLines = new ArrayList<>();
-            Scanner scanner = new Scanner(file);
-
-            if (scanner.hasNextLine()) {
-                updatedLines.add(scanner.nextLine()); // Keep header line
+            File file = new File("banker.csv");
+            if (!file.exists()) {
+                JOptionPane.showMessageDialog(this, "User database not found");
+                return;
             }
 
-            boolean emailMatched = false;
+            Scanner scanner = new Scanner(file);
+
+            if (scanner.hasNextLine()){
+                scanner.nextLine();
+            }
 
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
                 String[] parts = line.split(",");
-
-                if (role.equalsIgnoreCase("user") && parts.length >= 8 && parts[7].trim().equalsIgnoreCase(bankerEmail)) {
-                    parts[1] = newPassword; // Update password
-                    updatedLines.add(String.join(",", parts));
-                    emailMatched = true;
-
-                } else if (role.equalsIgnoreCase("banker") && parts.length == 3 && parts[2].trim().equalsIgnoreCase(bankerEmail)) {
-                    updatedLines.add(parts[0] + "," + newPassword + "," + parts[2]);
-                    emailMatched = true;
-
-                } else {
-                    updatedLines.add(line);
+                if (parts.length >= 2) {
+                    String storedUsername = parts[0].trim();
+                    String storedPassword = parts[1].trim();
+                    if (inputUsername.equals(storedUsername) && inputPassword.equals(storedPassword)) {
+                        loginSuccess = true;
+                        break;
+                    }
                 }
             }
             scanner.close();
 
-            if (!emailMatched) {
-                JOptionPane.showMessageDialog(this, "Error: email not found in "+ filePath + ".");
-                return;
+            if (loginSuccess) {
+                JOptionPane.showMessageDialog(this, "Login successful!");
+                new BankerDashboard().setVisible(true);
+                this.dispose();
+                // Open dashboard or next page
+                // new BankerDashboard().setVisible(true);
+                // dispose(); // close login window
+            } else {
+                JOptionPane.showMessageDialog(this, "Invalid username or password.");
             }
-
-            FileWriter writer = new FileWriter(file);
-            for (String updatedLine : updatedLines) {
-                writer.write(updatedLine + "\n");
-            }
-            writer.close();
-
-            JOptionPane.showMessageDialog(this, "Password reset successful! Redirecting to login...");
-            this.dispose(); // Close current window
-            new Welcome().setVisible(true); // Show login screen
 
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(this, "Error updating password file.");
+            JOptionPane.showMessageDialog(this, "Error reading banker file.");
             e.printStackTrace();
-        }
+            }
     }                                           
 
-    private void confirmPasswordFieldActionPerformed(java.awt.event.ActionEvent evt) {                                                     
-        // TODO add your handling code here:
-    }                                                    
+    private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {                                           
+        new Welcome().setVisible(true);
+        dispose();
+    }                                          
 
-    private void newPasswordFieldActionPerformed(java.awt.event.ActionEvent evt) {                                                 
-        // TODO add your handling code here:
-    }                                                
+    private void passwordFieldActionPerformed(java.awt.event.ActionEvent evt) {                                              
+        String inputPassword = passwordField.getText();
+    }                                             
+
+    private void backButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                            
+        new ForgotPassword("banker").setVisible(true);
+        dispose();
+    }                                           
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-    }
 
     // Variables declaration - do not modify                     
-    private javax.swing.JTextField confirmPasswordField;
+    private javax.swing.JPanel Left;
+    private javax.swing.JPanel Right;
+    private javax.swing.JButton backButton;
+    private javax.swing.JButton backButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JTextField newPasswordField;
-    private javax.swing.JButton resetButton;
+    private javax.swing.JButton loginButton;
+    private javax.swing.JPasswordField passwordField;
+    private javax.swing.JTextField usernameField;
     // End of variables declaration                   
 }
