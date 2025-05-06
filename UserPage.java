@@ -89,15 +89,15 @@ public class UserPage {
         // button functionality
         depositButton.addActionListener(e -> {
             frame.dispose(); // close current window
-            //new DepositPage(currentUser); // call deposit class to open window
+            new DepositPanel(currentUser); // call deposit class to open window
         });
         withdrawButton.addActionListener(e -> {
             frame.dispose();
-            //new WithdrawPage(currentUser); //rename
+            new WithdrawPanel(currentUser); //rename
         });
         transferButton.addActionListener(e -> {
             frame.dispose();
-            // new TransferHandler(currentUser);
+            new TransferHandler(currentUser);
         });
         panel.add(Box.createRigidArea(new Dimension(0, 10)));
         panel.add(greeting);
