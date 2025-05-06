@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package finalproject;
+
 
 import javax.swing.*;
 import java.awt.event.*;
@@ -219,7 +219,7 @@ public class ForgotPassword extends javax.swing.JFrame {
 
         boolean emailFound = false;
         
-        String csvFile = role.equalsIgnoreCase("user") ? "user.csv" : "banker.csv";
+        String csvFile = role.equalsIgnoreCase("user") ? "src/user.csv" : "src/banker.csv";
 
         try {
             Scanner scanner = new Scanner(new File(csvFile));
