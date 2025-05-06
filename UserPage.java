@@ -27,14 +27,13 @@ public class UserPage {
         }
     }
 
-    // ✅ Updated to match 7-column CSV
     private static void loadUserBalances(String filename) {
         try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
             String line;
             br.readLine(); // skip header
             while ((line = br.readLine()) != null) {
-                String[] column = line.split(",", -1); // -1 so data isn't lost, keeps 7 columns
-                if (column.length >= 7) {
+                String[] column = line.split(",", -1); // -1 so data isn't lost, keeps 8 columns
+                if (column.length >= 8) {
                     String username = column[0];
                     String password = column[1];
                     String firstName = column[2];
