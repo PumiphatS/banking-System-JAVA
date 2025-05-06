@@ -5,15 +5,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class UserPage {
-    // user balances from csv
     private static Map<String, User> userBalances = new HashMap<>();
-
-    // currently selected user
     private static User currentUser = null;
 
     public static void main(String[] args) {
-        // test with hardcoded username
-        launchForUser("user"); // replace with a real username from user.csv
+        launchForUser("user"); // selected username will replace
     }
 
     public static void launchForUser(String selectedUsername) {
@@ -27,12 +23,16 @@ public class UserPage {
         }
     }
 
+    public static User getCurrentUser() {
+        return currentUser;
+    }
+
     private static void loadUserBalances(String filename) {
         try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
             String line;
             br.readLine(); // skip header
             while ((line = br.readLine()) != null) {
-                String[] column = line.split(",", -1); // -1 so data isn't lost, keeps 8 columns
+                String[] column = line.split(",", -1);
                 if (column.length >= 8) {
                     String username = column[0];
                     String password = column[1];
@@ -41,8 +41,9 @@ public class UserPage {
                     String accountNumber = column[4];
                     double checkingBalance = Double.parseDouble(column[5]);
                     double savingsBalance = Double.parseDouble(column[6]);
+                    String email = column[7];
 
-                    userBalances.put(username, new User(username, password, firstName, lastName, accountNumber, checkingBalance, savingsBalance));
+                    userBalances.put(username, new User(username, password, firstName, lastName, accountNumber, checkingBalance, savingsBalance, email));
                 }
             }
         } catch (IOException | NumberFormatException e) {
@@ -90,20 +91,23 @@ public class UserPage {
 
         depositButton.addActionListener(e -> {
             frame.dispose();
-            new DepositPanel(currentUser);
+            // new DepositPanel(currentUser); // implement if needed
         });
+
         withdrawButton.addActionListener(e -> {
             frame.dispose();
-            new WithdrawPanel(currentUser);
+            new WithdrawPanel(currentUser).setVisible(true);
         });
+
         transferButton.addActionListener(e -> {
             frame.dispose();
-            new TransferHandler(currentUser);
+            // new TransferHandler(currentUser); // implement if needed
         });
+
         logoutButton.addActionListener(e -> {
             frame.dispose();
             JOptionPane.showMessageDialog(null, "Logged out successfully.");
-            new UserLogin().setVisible(true);
+            // new UserLogin().setVisible(true); // implement if needed
         });
 
         panel.add(Box.createRigidArea(new Dimension(0, 10)));
@@ -121,45 +125,40 @@ public class UserPage {
         frame.setVisible(true);
     }
 
-    // save user balances to csv
     public static void saveCurrentUser(String filename) {
         try {
             File file = new File(filename);
             BufferedReader reader = new BufferedReader(new FileReader(file));
             StringBuilder updatedContent = new StringBuilder();
-    
-            String header = reader.readLine(); // read and keep header
+
+            String header = reader.readLine();
             updatedContent.append(header).append("\n");
-    
+
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] column = line.split(",", -1);
                 if (column.length >= 8 && column[0].equals(currentUser.getUsername())) {
-                    // Rewrite only this user's line
-                    String updatedLine = String.format("%s,%s,%s,%s,%s,%.2f,%.2f",
+                    String updatedLine = String.format("%s,%s,%s,%s,%s,%.2f,%.2f,%s",
                             currentUser.getUsername(),
                             currentUser.getPassword(),
                             currentUser.getFirstName(),
                             currentUser.getLastName(),
                             currentUser.getAccountNumber(),
                             currentUser.getCheckingBalance(),
-                            currentUser.getSavingsBalance()
-                            currentUser.getEmail();
-                    );
+                            currentUser.getSavingsBalance(),
+                            currentUser.getEmail());
                     updatedContent.append(updatedLine).append("\n");
                 } else {
-                    updatedContent.append(line).append("\n"); // keep line unchanged
+                    updatedContent.append(line).append("\n");
                 }
             }
             reader.close();
-    
-            // Write updated content back
+
             FileWriter writer = new FileWriter(file);
             writer.write(updatedContent.toString());
             writer.close();
-    
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Failed to update user.csv", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-}    
+}
