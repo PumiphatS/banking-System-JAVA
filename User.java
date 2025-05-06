@@ -1,17 +1,33 @@
-// user class to hold balance info and update it accordingly
 public class User {
-    public String username;
-    public double checkingBalance;
-    public double savingsBalance;
-    public double totalDeposited;
-    public double totalTransferred;
+    private String username;
+    private double checkingBalance;
+    private double savingsBalance;
 
-    public User(String username, double checkingBalance, double savingsBalance,
-                double totalDeposited, double totalTransferred) {
+    public User(String username, double checkingBalance, double savingsBalance) {
         this.username = username;
         this.checkingBalance = checkingBalance;
         this.savingsBalance = savingsBalance;
-        this.totalDeposited = totalDeposited;
-        this.totalTransferred = totalTransferred;
+    }
+
+    // Getters
+    public String getUsername() {
+        return username;
+    }
+
+    public double getCheckingBalance() {
+        return checkingBalance;
+    }
+
+    public double getSavingsBalance() {
+        return savingsBalance;
+    }
+
+    // Setters
+    public void setCheckingBalance(double checkingBalance) {
+        this.checkingBalance = checkingBalance;
+    }
+
+    public void setSavingsBalance(double savingsBalance) {
+        this.savingsBalance = savingsBalance;
     }
 }
