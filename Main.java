@@ -19,7 +19,7 @@ public class Main {
         welcomeFrame.setVisible(true);
         welcomeFrame.pack();
         welcomeFrame.setLocationRelativeTo(null);
-        
+        /*
         BankerLogin LoginFrame1 = new BankerLogin();
         LoginFrame1.setVisible(false);
         LoginFrame1.pack();
@@ -39,5 +39,6 @@ public class Main {
         changeFrame.setVisible(false);
         changeFrame.pack();
         changeFrame.setLocationRelativeTo(null);
+        */
     }  
 }
