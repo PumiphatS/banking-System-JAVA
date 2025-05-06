@@ -1,2 +1,2 @@
-username, password, firstName, lastName, accountNumber, checkingAmount, savingAmount
-test,test,test,test,1,1,1
+username,password,firstName,lastName,accountNumber,checkingAmount,savingAmount,emailAddress
+test,Hi123,test,test,1,1,1,3rqu6@chefalicious.com
