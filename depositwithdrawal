@@ -1,37 +1,42 @@
 import javax.swing.*;
 
-public class DepositPanel extends javax.swing.JFrame {
-    private User currentUser;  // reference to the user
+public class DepositPanel extends JFrame {
+    private User currentUser;
 
-    // Constructor
     public DepositPanel(User user) {
         this.currentUser = user;
         initComponents();
     }
 
-    // GUI components (auto-generated or manual)
     private void initComponents() {
-        JLabel depositLabel = new JLabel("Deposit Amount:");
-        JTextField amountField = new JTextField(10);
-        JButton confirmButton = new JButton("Confirm");
-        JButton backButton = new JButton("Back");
-
         setTitle("Deposit Funds");
-        setSize(300, 200);
+        setSize(320, 200);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
+        JLabel accountLabel = new JLabel("Select Account:");
+        String[] accounts = {"Checking", "Savings"};
+        JComboBox<String> accountDropdown = new JComboBox<>(accounts);
+
+        JLabel amountLabel = new JLabel("Deposit Amount:");
+        JTextField amountField = new JTextField(10);
+
+        JButton confirmButton = new JButton("Confirm");
+        JButton backButton = new JButton("Back");
+
         JPanel panel = new JPanel();
-        panel.add(depositLabel);
+        panel.add(accountLabel);
+        panel.add(accountDropdown);
+        panel.add(amountLabel);
         panel.add(amountField);
         panel.add(confirmButton);
         panel.add(backButton);
-
         add(panel);
 
-        // Confirm deposit action
         confirmButton.addActionListener(e -> {
+            String selectedAccount = (String) accountDropdown.getSelectedItem();
             String input = amountField.getText().trim();
+
             if (input.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Please enter an amount.");
                 return;
@@ -41,23 +46,28 @@ public class DepositPanel extends javax.swing.JFrame {
                 double amount = Double.parseDouble(input);
                 if (amount <= 0) {
                     JOptionPane.showMessageDialog(this, "Amount must be greater than 0.");
+                    return;
                 } else if (amount > 10000) {
                     JOptionPane.showMessageDialog(this, "Cannot deposit more than 10,000.");
-                } else {
-                    // Update user balance
-                    currentUser.setCheckingBalance(currentUser.getCheckingBalance() + amount);
-                    JOptionPane.showMessageDialog(this, "Deposit successful! New checking balance: $" + currentUser.getCheckingBalance());
-
-                    // Optionally return to main menu
-                    dispose();
-                    UserPage.launchForUser(currentUser.getUsername());
+                    return;
                 }
+
+                if (selectedAccount.equals("Checking")) {
+                    currentUser.setCheckingBalance(currentUser.getCheckingBalance() + amount);
+                } else {
+                    currentUser.setSavingsBalance(currentUser.getSavingsBalance() + amount);
+                }
+
+                UserPage.saveUserBalances("src/user.csv");
+                JOptionPane.showMessageDialog(this, "Deposit successful!");
+                dispose();
+                UserPage.launchForUser(currentUser.getUsername());
+
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(this, "Invalid number format.");
             }
         });
 
-        // Back button returns to main menu
         backButton.addActionListener(e -> {
             dispose();
             UserPage.launchForUser(currentUser.getUsername());
@@ -66,11 +76,17 @@ public class DepositPanel extends javax.swing.JFrame {
 }
 
 
+
+
+
+
 //
+
+
 
 import javax.swing.*;
 
-public class WithdrawPanel extends javax.swing.JFrame {
+public class WithdrawPanel extends JFrame {
     private User currentUser;
 
     public WithdrawPanel(User user) {
@@ -79,27 +95,34 @@ public class WithdrawPanel extends javax.swing.JFrame {
     }
 
     private void initComponents() {
-        JLabel withdrawLabel = new JLabel("Withdraw Amount:");
-        JTextField amountField = new JTextField(10);
-        JButton confirmButton = new JButton("Confirm");
-        JButton backButton = new JButton("Back");
-
         setTitle("Withdraw Funds");
-        setSize(300, 200);
+        setSize(320, 200);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
+        JLabel accountLabel = new JLabel("Select Account:");
+        String[] accounts = {"Checking", "Savings"};
+        JComboBox<String> accountDropdown = new JComboBox<>(accounts);
+
+        JLabel amountLabel = new JLabel("Withdraw Amount:");
+        JTextField amountField = new JTextField(10);
+
+        JButton confirmButton = new JButton("Confirm");
+        JButton backButton = new JButton("Back");
+
         JPanel panel = new JPanel();
-        panel.add(withdrawLabel);
+        panel.add(accountLabel);
+        panel.add(accountDropdown);
+        panel.add(amountLabel);
         panel.add(amountField);
         panel.add(confirmButton);
         panel.add(backButton);
-
         add(panel);
 
-        // Confirm withdrawal action
         confirmButton.addActionListener(e -> {
+            String selectedAccount = (String) accountDropdown.getSelectedItem();
             String input = amountField.getText().trim();
+
             if (input.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Please enter an amount.");
                 return;
@@ -109,22 +132,36 @@ public class WithdrawPanel extends javax.swing.JFrame {
                 double amount = Double.parseDouble(input);
                 if (amount <= 0) {
                     JOptionPane.showMessageDialog(this, "Amount must be greater than 0.");
-                } else if (amount > currentUser.getCheckingBalance()) {
-                    JOptionPane.showMessageDialog(this, "Insufficient funds.");
-                } else {
-                    currentUser.setCheckingBalance(currentUser.getCheckingBalance() - amount);
-                    JOptionPane.showMessageDialog(this, "Withdrawal successful! New checking balance: $" + currentUser.getCheckingBalance());
+                    return;
+                }
 
-                    // Optionally return to main menu
+                boolean success = false;
+                if (selectedAccount.equals("Checking")) {
+                    if (currentUser.getCheckingBalance() >= amount) {
+                        currentUser.setCheckingBalance(currentUser.getCheckingBalance() - amount);
+                        success = true;
+                    }
+                } else {
+                    if (currentUser.getSavingsBalance() >= amount) {
+                        currentUser.setSavingsBalance(currentUser.getSavingsBalance() - amount);
+                        success = true;
+                    }
+                }
+
+                if (success) {
+                    UserPage.saveUserBalances("src/user.csv");
+                    JOptionPane.showMessageDialog(this, "Withdrawal successful!");
                     dispose();
                     UserPage.launchForUser(currentUser.getUsername());
+                } else {
+                    JOptionPane.showMessageDialog(this, "Insufficient funds.");
                 }
+
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(this, "Invalid number format.");
             }
         });
 
-        // Back button returns to main menu
         backButton.addActionListener(e -> {
             dispose();
             UserPage.launchForUser(currentUser.getUsername());
