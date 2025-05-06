@@ -1,4 +1,3 @@
-
 package banker;
 
 
@@ -14,7 +13,7 @@ public class CreateUser extends JFrame {
 	
 	//properties of the gui
 	JFrame createUser;
-	JLabel userName, passWord, firstName, lastName, accountNumber,checkingInitialBalance, savingInitialBalance, createUserLabel, homepageLabel;
+	JLabel userName, passWord, firstName, lastName, accountNumber,checkingInitialBalance, savingInitialBalance, emailLabel, createUserLabel, homepageLabel;
 	
 	JButton addUserButton, logoutButton, backToDashboardButton;
 	JPanel welcomePanel;
@@ -22,7 +21,7 @@ public class CreateUser extends JFrame {
 	JPanel bottomPanel;
 	
 	// Text fields as class variables
-    private JTextField userNameTextField, passWordTextField, firstNameTextField, lastNameTextField, accountNumberTextField, checkingInitialBalanceTextField, savingInitialBalanceTextField;
+    private JTextField userNameTextField, passWordTextField, firstNameTextField, lastNameTextField, accountNumberTextField, checkingInitialBalanceTextField, savingInitialBalanceTextField, emailTextField;
     //the csv file will be stored in a string variable.
     private static final String csvFile = "src/user.csv";
 	
@@ -50,7 +49,7 @@ public class CreateUser extends JFrame {
         
         //---the middle part of the border
         actionPanel = new JPanel();
-        actionPanel.setLayout(new GridLayout(7,2,3,3)); //setting the layout for the middle panel.
+        actionPanel.setLayout(new GridLayout(8,2,3,3)); //setting the layout for the middle panel. 7 rows and 2 collumn
         userName = new JLabel("Enter Username:");
         actionPanel.add(userName);
         userNameTextField = new JTextField();
@@ -80,16 +79,28 @@ public class CreateUser extends JFrame {
         actionPanel.add(accountNumberTextField);
         
         
-        
+        //checking balance
         checkingInitialBalance = new JLabel("Enter Initial checking Amount:");
         actionPanel.add(checkingInitialBalance);
         checkingInitialBalanceTextField = new JTextField();
         actionPanel.add(checkingInitialBalanceTextField);
         
+        //saving balance 
         savingInitialBalance = new JLabel("Enter Initial Saving Amount");
         actionPanel.add(savingInitialBalance);
         savingInitialBalanceTextField = new JTextField();
         actionPanel.add(savingInitialBalanceTextField);
+        
+        
+        
+      //this portionwill either be email or phone number.
+        //yes phone number is easier.
+        emailLabel = new JLabel("Create Email:");
+        actionPanel.add(emailLabel);
+        emailTextField = new JTextField();
+        actionPanel.add(emailTextField);
+        
+        //add the panel to the layout.
         add(actionPanel, BorderLayout.CENTER);
         
         
@@ -121,6 +132,7 @@ public class CreateUser extends JFrame {
         	dispose();
         	JOptionPane.showMessageDialog(this, "Logged out Successfully!.");
         	
+        	
         });
         
         //call the method that will impose the validation when the create user button is pressed.
@@ -129,6 +141,8 @@ public class CreateUser extends JFrame {
         setVisible(true);
  
 	}
+	
+	
 	// Method to validate and save user info
     private void validateAndSaveUser() {
         String username = userNameTextField.getText().trim();
@@ -138,6 +152,7 @@ public class CreateUser extends JFrame {
         String accountNum = accountNumberTextField.getText().trim();
         String checking = checkingInitialBalanceTextField.getText().trim();
         String saving = savingInitialBalanceTextField.getText().trim();
+        String email = emailTextField.getText().trim();
         
         //validation.
         if (username.isEmpty() || password.isEmpty() || firstName.isEmpty() || lastName.isEmpty() ||
@@ -159,6 +174,10 @@ public class CreateUser extends JFrame {
             JOptionPane.showMessageDialog(this, "Account Number already exists!", "Duplicate Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
+        
+        if (isDuplicateEmail(email)) {
+        	JOptionPane.showMessageDialog(this,  "Account Email Already Exists!", "Duplicate Error", JOptionPane.ERROR_MESSAGE);
+        }
 
         // Format amounts this will format the amount saving and checking to be 2 deciamls.
         String formattedChecking = String.format("%.2f", Double.parseDouble(checking));
@@ -167,12 +186,13 @@ public class CreateUser extends JFrame {
         // Append to CSV
         try (FileWriter writer = new FileWriter(csvFile, true)) {
             writer.append(username).append(",")
-                  .append(password).append(",")
+            	.append(password).append(",")
                   .append(firstName).append(",")
                   .append(lastName).append(",")
                   .append(accountNum).append(",")
                   .append(formattedChecking).append(",")
-                  .append(formattedSaving).append("\n");
+                  .append(formattedSaving).append(",")
+                  .append(email).append("\n");
 
             JOptionPane.showMessageDialog(this, "User created successfully!"); 
             clearFields();
@@ -182,10 +202,30 @@ public class CreateUser extends JFrame {
         }
     }
 
-    // Check if account number already exists in CSV
+    private boolean isDuplicateEmail(String email) {
+		// TODO Auto-generated method stub
+    	try (Scanner scanner = new Scanner(new File(csvFile))) {
+    		scanner.nextLine(); //skips the header.
+    		
+    		//loop through each line.
+    		while( scanner.hasNext()) {
+    			String[] data = scanner.nextLine().split(",");
+    			if (data.length >= 8 && data[7].equals(email)) {
+                    return true;
+                }
+            }
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Error reading CSV: " + e.getMessage(), "File Error", JOptionPane.ERROR_MESSAGE);
+        }
+        return false;
+    }
+
+
+	// Check if account number already exists in CSV
     private boolean isDuplicateAccountNumber(String accountNum) {
         try (Scanner scanner = new Scanner(new File(csvFile))) {
             scanner.nextLine(); // Skip header
+            
             while (scanner.hasNextLine()) {
                 String[] data = scanner.nextLine().split(",");
                 if (data.length >= 5 && data[4].equals(accountNum)) {
@@ -198,7 +238,7 @@ public class CreateUser extends JFrame {
         return false;
     }
     
-    //this method validates if its double.
+    //this method validates if its double. or converts it into a double variable from string.
     private boolean isValidDouble(String value) {
         try {
             Double.parseDouble(value);
@@ -218,6 +258,8 @@ public class CreateUser extends JFrame {
         accountNumberTextField.setText("");
         checkingInitialBalanceTextField.setText("");
         savingInitialBalanceTextField.setText("");
+        emailTextField.setText("");
     }
 
 }
+
