@@ -61,8 +61,8 @@ public class UserPage {
         greeting.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // display user checking and savings balance
-        JLabel checkingLabel = new JLabel("Checking Balance: $" + currentUser.getCheckingBalance); // from column 6
-        JLabel savingsLabel = new JLabel("Savings Balance: $" + currentUser.getSavingsBalance); // from column 7
+        JLabel checkingLabel = new JLabel("Checking Balance: $" + currentUser.getCheckingBalance()); // from column 6
+        JLabel savingsLabel = new JLabel("Savings Balance: $" + currentUser.getSavingsBalance()); // from column 7
         checkingLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         savingsLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
@@ -70,21 +70,25 @@ public class UserPage {
         JButton depositButton = new JButton("Deposit");
         JButton withdrawButton = new JButton("Withdraw");
         JButton transferButton = new JButton("Transfer");
+        JButton logoutButton = new JButton("Logout");
 
         // button sizes
         Dimension buttonSize = new Dimension(120, 30);
         depositButton.setPreferredSize(buttonSize);
         withdrawButton.setPreferredSize(buttonSize);
         transferButton.setPreferredSize(buttonSize);
+        logoutButton.setPreferredSize(buttonSize);
 
         // button placement (center)
         JPanel depositPanel = new JPanel();
         JPanel withdrawPanel = new JPanel();
         JPanel transferPanel = new JPanel();
+        JPanel logoutPanel = new JPanel();
 
         depositPanel.add(depositButton);
         withdrawPanel.add(withdrawButton);
         transferPanel.add(transferButton);
+        logoutPanel.add(logoutButton);
 
         // button functionality
         depositButton.addActionListener(e -> {
@@ -99,6 +103,13 @@ public class UserPage {
             frame.dispose();
             new TransferHandler(currentUser);
         });
+        logoutButton.addActionListener(e -> {
+            frame.dispose();
+            JOptionPane.showMessageDialog(null, "Logged out successfully.");
+        });
+        
+
+        // panels
         panel.add(Box.createRigidArea(new Dimension(0, 10)));
         panel.add(greeting);
         panel.add(Box.createRigidArea(new Dimension(0, 10)));
@@ -108,6 +119,7 @@ public class UserPage {
         panel.add(depositPanel);
         panel.add(withdrawPanel);
         panel.add(transferPanel);
+        panel.add(logoutPanel);
 
         frame.add(panel);
         frame.setVisible(true);
