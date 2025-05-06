@@ -106,6 +106,7 @@ private static void showMainMenu() {
     logoutButton.addActionListener(e -> {
         frame.dispose();
         JOptionPane.showMessageDialog(null, "Logged out successfully.");
+        new UserLogin().setVisible(true);
     });
     
 
@@ -125,23 +126,23 @@ private static void showMainMenu() {
     frame.setVisible(true);
 } 
 
-    public static void saveUserBalances(String filename) {
-        try (PrintWriter writer = new PrintWriter(new FileWriter(filename))) {
-            // Write CSV header
-            writer.println("username,password,field3,field4,field5,checking,savings");
+public static void saveUserBalances(String filename) {
+    try (PrintWriter writer = new PrintWriter(new FileWriter(filename))) {
+        // Write CSV header
+        writer.println("username,password,field3,field4,field5,checking,savings");
 
-            for (User user : userBalances.values()) {
-                writer.printf("%s,%s,,,%s,%.2f,%.2f%n",
-                        user.getUsername(),
-                        user.getPassword(), 
-                        "", // field5 placeholder
-                        user.getCheckingBalance(),
-                        user.getSavingsBalance()
-                );
-            }
-
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, "Failed to save user.csv", "Error", JOptionPane.ERROR_MESSAGE);
+        for (User user : userBalances.values()) {
+            writer.printf("%s,%s,,,%s,%.2f,%.2f%n",
+                    user.getUsername(),
+                    user.getPassword(), // only if you're using passwords
+                    "",                 // field5 placeholder
+                    user.getCheckingBalance(),
+                    user.getSavingsBalance()
+            );
         }
+
+    } catch (IOException e) {
+        JOptionPane.showMessageDialog(null, "Failed to save user.csv", "Error", JOptionPane.ERROR_MESSAGE);
     }
+}
 }
