@@ -5,123 +5,143 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class UserPage {
-    // user balances from csv
-    private static Map<String, User> userBalances = new HashMap<>();
+// user balances from csv
+private static Map<String, User> userBalances = new HashMap<>();
 
-    // currently selected user (manually set below)
-    private static User currentUser = null; // null because user hasn't been selected yet
+// currently selected user (manually set below)
+private static User currentUser = null; // null because user hasn't been selected yet
 
-    public static void main(String[] args) {
-        // test with hardcoded username
-        launchForUser("user"); // Replace "user" with a username from the csv
+public static void main(String[] args) {
+    // test with hardcoded username
+    launchForUser("user"); // Replace "user" with a username from the csv
+}
+    
+public static void launchForUser(String selectedUsername) {
+    loadUserBalances("src/user.csv"); // loads user.csv data
+    currentUser = userBalances.get(selectedUsername); // store user in currentUser, then opens GUI
+
+    // error if user not found
+    if (currentUser != null) {
+        showMainMenu();
+    } else {
+        JOptionPane.showMessageDialog(null, "User not found: " + selectedUsername, "Error", JOptionPane.ERROR_MESSAGE);
     }
-        
-    public static void launchForUser(String selectedUsername) {
-        loadUserBalances("src/user.csv"); // loads user.csv data
-        currentUser = userBalances.get(selectedUsername); // store user in currentUser, then opens GUI
+}
 
-        // error if user not found
-        if (currentUser != null) {
-            showMainMenu();
-        } else {
-            JOptionPane.showMessageDialog(null, "User not found: " + selectedUsername, "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
-    // load balances from user.csv (columns: username [0], password [1], checking [5], savings [6])
-    private static void loadUserBalances(String filename) {
-        try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
-            String line;
-            br.readLine(); // skip header
-            while ((line = br.readLine()) != null) {
-                String[] column = line.split(",");
-                if (column.length >= 7) {
-                    String username = column[0];
-                    double checkingBalance = Double.parseDouble(column[5]);
-                    double savingsBalance = Double.parseDouble(column[6]);
-                    userBalances.put(username, new User(username,checkingBalance,savingsBalance));
-                }
+// load balances from user.csv (columns: username [0], password [1], checking [5], savings [6])
+private static void loadUserBalances(String filename) {
+    try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
+        String line;
+        br.readLine(); // skip header
+        while ((line = br.readLine()) != null) {
+            String[] column = line.split(",");
+            if (column.length >= 7) {
+                String username = column[0];
+                double checkingBalance = Double.parseDouble(column[5]);
+                double savingsBalance = Double.parseDouble(column[6]);
+                userBalances.put(username, new User(username,checkingBalance,savingsBalance));
             }
-        } catch (IOException | NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Failed to load user.csv", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    } catch (IOException | NumberFormatException e) {
+        JOptionPane.showMessageDialog(null, "Failed to load user.csv", "Error", JOptionPane.ERROR_MESSAGE);
+    }
+}
+
+// user banking menu
+private static void showMainMenu() {
+    JFrame frame = new JFrame("Banking Options"); // window title
+    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    frame.setSize(400, 300);
+    frame.setLocationRelativeTo(null); // window is centered
+
+    JPanel panel = new JPanel();
+    panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
+    JLabel greeting = new JLabel("What would you like to do?");
+    greeting.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+    // display user checking and savings balance
+    JLabel checkingLabel = new JLabel("Checking Balance: $" + currentUser.getCheckingBalance()); // from column 6
+    JLabel savingsLabel = new JLabel("Savings Balance: $" + currentUser.getSavingsBalance()); // from column 7
+    checkingLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+    savingsLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+    // buttons
+    JButton depositButton = new JButton("Deposit");
+    JButton withdrawButton = new JButton("Withdraw");
+    JButton transferButton = new JButton("Transfer");
+    JButton logoutButton = new JButton("Logout");
+
+    // button sizes
+    Dimension buttonSize = new Dimension(120, 30);
+    depositButton.setPreferredSize(buttonSize);
+    withdrawButton.setPreferredSize(buttonSize);
+    transferButton.setPreferredSize(buttonSize);
+    logoutButton.setPreferredSize(buttonSize);
+
+    // button placement (center)
+    JPanel depositPanel = new JPanel();
+    JPanel withdrawPanel = new JPanel();
+    JPanel transferPanel = new JPanel();
+    JPanel logoutPanel = new JPanel();
+
+    depositPanel.add(depositButton);
+    withdrawPanel.add(withdrawButton);
+    transferPanel.add(transferButton);
+    logoutPanel.add(logoutButton);
+
+    // button functionality
+    depositButton.addActionListener(e -> {
+        frame.dispose(); // close current window
+        new DepositPanel(currentUser); // call deposit class to open window
+    });
+    withdrawButton.addActionListener(e -> {
+        frame.dispose();
+        new WithdrawPanel(currentUser); //rename
+    });
+    transferButton.addActionListener(e -> {
+        frame.dispose();
+        new TransferHandler(currentUser);
+    });
+    logoutButton.addActionListener(e -> {
+        frame.dispose();
+        JOptionPane.showMessageDialog(null, "Logged out successfully.");
+    });
+    
+
+    // panels
+    panel.add(Box.createRigidArea(new Dimension(0, 10)));
+    panel.add(greeting);
+    panel.add(Box.createRigidArea(new Dimension(0, 10)));
+    panel.add(checkingLabel);
+    panel.add(savingsLabel);
+    panel.add(Box.createRigidArea(new Dimension(0, 20)));
+    panel.add(depositPanel);
+    panel.add(withdrawPanel);
+    panel.add(transferPanel);
+    panel.add(logoutPanel);
+
+    frame.add(panel);
+    frame.setVisible(true);
+} 
+
+    public static void saveUserBalances(String filename) {
+        try (PrintWriter writer = new PrintWriter(new FileWriter(filename))) {
+            // Write CSV header
+            writer.println("username,password,field3,field4,field5,checking,savings");
+
+            for (User user : userBalances.values()) {
+                writer.printf("%s,%s,,,%s,%.2f,%.2f%n",
+                        user.getUsername(),
+                        user.getPassword(), 
+                        "", // field5 placeholder
+                        user.getCheckingBalance(),
+                        user.getSavingsBalance()
+                );
+            }
+
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Failed to save user.csv", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-
-    // user banking menu
-    private static void showMainMenu() {
-        JFrame frame = new JFrame("Banking Options"); // window title
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(400, 300);
-        frame.setLocationRelativeTo(null); // window is centered
-
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-
-        JLabel greeting = new JLabel("What would you like to do?");
-        greeting.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        // display user checking and savings balance
-        JLabel checkingLabel = new JLabel("Checking Balance: $" + currentUser.getCheckingBalance()); // from column 6
-        JLabel savingsLabel = new JLabel("Savings Balance: $" + currentUser.getSavingsBalance()); // from column 7
-        checkingLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        savingsLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        // buttons
-        JButton depositButton = new JButton("Deposit");
-        JButton withdrawButton = new JButton("Withdraw");
-        JButton transferButton = new JButton("Transfer");
-        JButton logoutButton = new JButton("Logout");
-
-        // button sizes
-        Dimension buttonSize = new Dimension(120, 30);
-        depositButton.setPreferredSize(buttonSize);
-        withdrawButton.setPreferredSize(buttonSize);
-        transferButton.setPreferredSize(buttonSize);
-        logoutButton.setPreferredSize(buttonSize);
-
-        // button placement (center)
-        JPanel depositPanel = new JPanel();
-        JPanel withdrawPanel = new JPanel();
-        JPanel transferPanel = new JPanel();
-        JPanel logoutPanel = new JPanel();
-
-        depositPanel.add(depositButton);
-        withdrawPanel.add(withdrawButton);
-        transferPanel.add(transferButton);
-        logoutPanel.add(logoutButton);
-
-        // button functionality
-        depositButton.addActionListener(e -> {
-            frame.dispose(); // close current window
-            new DepositPanel(currentUser); // call deposit class to open window
-        });
-        withdrawButton.addActionListener(e -> {
-            frame.dispose();
-            new WithdrawPanel(currentUser); //rename
-        });
-        transferButton.addActionListener(e -> {
-            frame.dispose();
-            new TransferHandler(currentUser);
-        });
-        logoutButton.addActionListener(e -> {
-            frame.dispose();
-            JOptionPane.showMessageDialog(null, "Logged out successfully.");
-        });
-        
-
-        // panels
-        panel.add(Box.createRigidArea(new Dimension(0, 10)));
-        panel.add(greeting);
-        panel.add(Box.createRigidArea(new Dimension(0, 10)));
-        panel.add(checkingLabel);
-        panel.add(savingsLabel);
-        panel.add(Box.createRigidArea(new Dimension(0, 20)));
-        panel.add(depositPanel);
-        panel.add(withdrawPanel);
-        panel.add(transferPanel);
-        panel.add(logoutPanel);
-
-        frame.add(panel);
-        frame.setVisible(true);
-    } 
 }
