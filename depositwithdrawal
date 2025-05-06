@@ -106,6 +106,7 @@ public class WithdrawPanel extends JFrame {
 
     public WithdrawPanel(User user) {
         this.currentUser = user;
+        UserPage.currentUser = user; // <-- set for saving
         initComponents();
     }
 
@@ -136,7 +137,6 @@ public class WithdrawPanel extends JFrame {
 
         add(panel);
 
-        // Update balance label on account switch
         accountDropdown.addActionListener(e -> {
             updateBalanceLabel((String) accountDropdown.getSelectedItem());
         });
@@ -198,3 +198,4 @@ public class WithdrawPanel extends JFrame {
         }
     }
 }
+
