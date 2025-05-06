@@ -17,7 +17,7 @@ public class UserPage {
     }
         
     public static void launchForUser(String selectedUsername) {
-        loadUserBalances("user.csv"); // loads user.csv data
+        loadUserBalances("src/user.csv"); // loads user.csv data
         currentUser = userBalances.get(selectedUsername); // store user in currentUser, then opens GUI
 
         // error if user not found
@@ -28,7 +28,7 @@ public class UserPage {
         }
     }
 
-    // load balances from user.csv (columns: username [0], checking [5], savings [6])
+    // load balances from user.csv (columns: username [0], password [1], checking [5], savings [6])
     private static void loadUserBalances(String filename) {
         try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
             String line;
@@ -39,7 +39,7 @@ public class UserPage {
                     String username = column[0];
                     double checkingBalance = Double.parseDouble(column[5]);
                     double savingsBalance = Double.parseDouble(column[6]);
-                    userBalances.put(username, new User(username, checkingBalance, savingsBalance));
+                    userBalances.put(username, new User(username,checkingBalance,savingsBalance));
                 }
             }
         } catch (IOException | NumberFormatException e) {
@@ -61,8 +61,8 @@ public class UserPage {
         greeting.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // display user checking and savings balance
-        JLabel checkingLabel = new JLabel("Checking Balance: $" + currentUser.getCheckingBalance()); // from column 6
-        JLabel savingsLabel = new JLabel("Savings Balance: $" + currentUser.getSavingsBalance()); // from column 7
+        JLabel checkingLabel = new JLabel("Checking Balance: $" + currentUser.getCheckingBalance); // from column 6
+        JLabel savingsLabel = new JLabel("Savings Balance: $" + currentUser.getSavingsBalance); // from column 7
         checkingLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         savingsLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
@@ -97,7 +97,7 @@ public class UserPage {
         });
         transferButton.addActionListener(e -> {
             frame.dispose();
-            new TransferHandler(currentUser);
+            // new TransferHandler(currentUser);
         });
         panel.add(Box.createRigidArea(new Dimension(0, 10)));
         panel.add(greeting);
