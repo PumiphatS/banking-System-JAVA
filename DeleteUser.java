@@ -23,9 +23,9 @@ public class DeleteUser extends JFrame {
 	private ArrayList<String[]> userData = new ArrayList<>();
 	
 	//we will import the csv file with the path.
-	private final String CSV_FILE = "src/user.csv";
+	private final String CSV_FILE = "src/banker.csv";
 	//THIS WILL BE THE HEADER FOR OUR CSV FILE EVERYTIME.
-	private final String header = "username, password, firstName, lastName, accountNumber, checkingAmount, savingAmount";
+	private final String header = "username, password, firstName, lastName, accountNumber, checkingAmount, savingAmount, email";
 	
 	//now we will set up the window design for deleting users.
 	public DeleteUser(){
@@ -63,7 +63,7 @@ public class DeleteUser extends JFrame {
 			//closes this window
 			dispose();
 			
-			//show the message that says returning to dashboard.
+		//show the message that says returning to dashboard.
         JOptionPane.showMessageDialog(this, "Returning to Dashboard...");
         //open the banker dashboard once more.
         new BankerDashboard();
@@ -86,43 +86,48 @@ public class DeleteUser extends JFrame {
 	
 
 	private void loadCSV() {
+		//clear the array list each time.
 	    userData.clear();
-	    contentPanel.removeAll();
+	    contentPanel.removeAll(); //remove everything from contentpanel each time.
 
 	    try (BufferedReader br = new BufferedReader(new FileReader(CSV_FILE))) {
 	        String line;
 
 	        br.readLine();  // Skip the first header line
-
+	        
+	        //
 	        while ((line = br.readLine()) != null) {
-	            line = line.trim();
+	            line = line.trim(); //removes any leading/trailing spaces.
 	            if (line.isEmpty() || line.equals(header)) {
 	                continue;  // Skip empty lines or duplicate headers
 	            }
 	            String[] values = line.split(",");
-	            userData.add(values);
-	            addUserRow(values);
+	            userData.add(values); //store the values of each line into the array list called userData
+	            //store the line into the guipanel.
+	            //call the addUserRow method that addds into the panel. 
+	            addUserRow(values); //creates the row in the gui. label.
 	        }
 
-	        revalidate();
-	        repaint();
+	        revalidate(); //Tells the layout manager to recalculate.
+	        repaint(); //Repaints the panel to visually reflect changes.
+	        
 	    } catch (IOException e) {
 	        JOptionPane.showMessageDialog(this, "Error loading user data: " + e.getMessage());
 	    }
 	}
 	
-	
+	//this method creates a user data and display it with delete button at the end of each line.
 	   private void addUserRow(String[] values) {
 	        JPanel rowPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));  // Horizontal row
 
-	        // For each value (e.g., John, Doe, Admin), create a read-only text field
+	        // For each value ), create a read-only text field
 	        for (String value : values) {
 	            JTextField textField = new JTextField(value, 10);
-	            textField.setEditable(false);   // Make it read-only
-	            rowPanel.add(textField);
+	            textField.setEditable(false);   // Make it read-only 
+	            rowPanel.add(textField);  //Adds each text field to the row panel.
 	        }
 
-	        // Create Delete button for this row
+	        // Create Delete button for the row
 	        JButton deleteButton = new JButton("Delete");
 
 	        // Define what happens when Delete is clicked
@@ -130,18 +135,17 @@ public class DeleteUser extends JFrame {
 	            // Show confirmation dialog before deleting
 	            int confirm = JOptionPane.showConfirmDialog(
 	                this,
-	                "Are you sure you want to delete this user?",
-	                "Confirm Deletion",
-	                JOptionPane.YES_NO_OPTION
+	                "Are you sure you want to delete this user?", "Confirm Deletion", JOptionPane.YES_NO_OPTION
 	            );
 
-	            // If user clicks "Yes" it will contentPanle pane will show up.
+	            // If user clicks "Yes" it will contentPanle pane will show up. and if they click confirm yes it will delete the user.
 	            if (confirm == JOptionPane.YES_OPTION) {
-	                int index = contentPanel.getComponentZOrder(rowPanel);  // Find row index
-	                contentPanel.remove(rowPanel);                          // Remove from GUI
-	                contentPanel.revalidate();
-	                contentPanel.repaint();
+	                int index = contentPanel.getComponentZOrder(rowPanel);  // Find row index or  Get the row's position
+	                contentPanel.remove(rowPanel);                          // Remove from GUI 
+	                contentPanel.revalidate(); //refreshes the gui
+	                contentPanel.repaint(); //refreshes the gui
 
+	                //delete from the csv as well.
 	                userData.remove(index);   //this method will remove the user from the list.
 	                updateCSV();               // we call the updateCSV method that will rewrite the new information.
 	            }
@@ -151,6 +155,7 @@ public class DeleteUser extends JFrame {
 	        contentPanel.add(rowPanel);    // Add the row to the main panel
 	    }
 
+	   
 	    //now we rewrite inot the CSV file because we made change to it with deleting a user.
 	   private void updateCSV() {
 		    try (BufferedWriter bw = new BufferedWriter(new FileWriter(CSV_FILE))) {
