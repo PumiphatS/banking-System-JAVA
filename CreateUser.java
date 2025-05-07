@@ -21,7 +21,9 @@ public class CreateUser extends JFrame {
 	JPanel bottomPanel;
 	
 	// Text fields as class variables
-    private JTextField userNameTextField, passWordTextField, firstNameTextField, lastNameTextField, accountNumberTextField, checkingInitialBalanceTextField, savingInitialBalanceTextField, emailTextField;
+    private JTextField userNameTextField, passWordTextField, firstNameTextField, lastNameTextField, 
+    accountNumberTextField, checkingInitialBalanceTextField, savingInitialBalanceTextField, emailTextField;
+    
     //the csv file will be stored in a string variable.
     private static final String csvFile = "src/user.csv";
 	
@@ -37,17 +39,19 @@ public class CreateUser extends JFrame {
         setLayout(new BorderLayout());
         setLocationRelativeTo(null);
         
-        
         setLayout(new BorderLayout());
         
-        //----the north border that include the wecome user panel.
+        
+        
+        
+        ////----the north border that include the welcome user panel.
         JPanel welcomePanel = new JPanel();
         welcomePanel.add(new JLabel("Input Information To Create New User"));
         add(welcomePanel, BorderLayout.NORTH);
         
         
         
-        //---the middle part of the border
+        ////---the middle part of the border
         actionPanel = new JPanel();
         actionPanel.setLayout(new GridLayout(8,2,3,3)); //setting the layout for the middle panel. 7 rows and 2 collumn
         userName = new JLabel("Enter Username:");
@@ -73,6 +77,7 @@ public class CreateUser extends JFrame {
         actionPanel.add(lastName);
         actionPanel.add(lastNameTextField);
         
+        //account number 
         accountNumber = new JLabel("enter Account Number (8 digits):");
         actionPanel.add(accountNumber);
         accountNumberTextField = new JTextField();
@@ -93,7 +98,7 @@ public class CreateUser extends JFrame {
         
         
         
-      //this portionwill either be email or phone number.
+       //this portion will either be email 
         //yes phone number is easier.
         emailLabel = new JLabel("Create Email:");
         actionPanel.add(emailLabel);
@@ -104,7 +109,7 @@ public class CreateUser extends JFrame {
         add(actionPanel, BorderLayout.CENTER);
         
         
-        //----now the bottom part whcih will have logout and addUser;
+        ////----now the bottom part whcih will have logout and addUser;
         bottomPanel = new JPanel();
         bottomPanel.setLayout(new FlowLayout());
         logoutButton = new JButton("Logout");
@@ -122,16 +127,19 @@ public class CreateUser extends JFrame {
         add(bottomPanel,BorderLayout.SOUTH);
         
         
-        //create methods for adding user to csv.
+        //when backToDashBoradButton is pressed it will dispose the currect and open up a new window calling bankerDashboard method.
         backToDashboardButton.addActionListener(e -> {
         	dispose();
         	new BankerDashboard();
         });
+        
         //create action listener for button logout to dispose the window and go back to lgoin page.
         logoutButton.addActionListener(e -> {
         	dispose();
         	JOptionPane.showMessageDialog(this, "Logged out Successfully!.");
         	
+        	//---hey friend this part you will call the method that will generate the gui for log in page for banker.i.e( enter: banker username, banker password)
+        	//ex. new BankerLoginPage();
         	
         });
         
@@ -154,24 +162,28 @@ public class CreateUser extends JFrame {
         String saving = savingInitialBalanceTextField.getText().trim();
         String email = emailTextField.getText().trim();
         
-        //validation.
+        //validation if validate whether if all the textfield are empty if empty it will pop up a JOptionPane error.
         if (username.isEmpty() || password.isEmpty() || firstName.isEmpty() || lastName.isEmpty() ||
         	    accountNum.isEmpty() || checking.isEmpty() || saving.isEmpty()) {
         	    JOptionPane.showMessageDialog(this, "All fields must be filled!", "Validation Error", JOptionPane.ERROR_MESSAGE);
         	    return;
         	}
+        //this if staetment checks whether if the accountNum which is set equal or gets from accountNumberTextField is exactly 8 or if not then error.
         if (!accountNum.matches("\\d{8}")) {
             JOptionPane.showMessageDialog(this, "Account Number must be exactly 8 digits!", "Validation Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-
+        
+        //this if statement checks if the 
         if (!isValidDouble(checking) || !isValidDouble(saving)) {
             JOptionPane.showMessageDialog(this, "Checking and Saving amounts must be valid numbers!", "Validation Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
      // // Check for duplicate account number
+        
         if (isDuplicateAccountNumber(accountNum)) {
-            JOptionPane.showMessageDialog(this, "Account Number already exists!", "Duplicate Error", JOptionPane.ERROR_MESSAGE);
+            //if the method calls return true it will pop up the JOption pane or the error message.
+        	JOptionPane.showMessageDialog(this, "Account Number already exists!", "Duplicate Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
         
@@ -183,7 +195,7 @@ public class CreateUser extends JFrame {
         String formattedChecking = String.format("%.2f", Double.parseDouble(checking));
         String formattedSaving = String.format("%.2f", Double.parseDouble(saving));
 
-        // Append to CSV
+        // Append to CSV using append methodfrom filewriter.
         try (FileWriter writer = new FileWriter(csvFile, true)) {
             writer.append(username).append(",")
             	.append(password).append(",")
@@ -195,6 +207,7 @@ public class CreateUser extends JFrame {
                   .append(email).append("\n");
 
             JOptionPane.showMessageDialog(this, "User created successfully!"); 
+            //after user is successfully created we clear all the textfield by calling the method clearField();
             clearFields();
 
         } catch (IOException ex) {
@@ -202,22 +215,24 @@ public class CreateUser extends JFrame {
         }
     }
 
+    //this checks whether there are a douplicate email in the csv. validating the email during creation process.
     private boolean isDuplicateEmail(String email) {
-		// TODO Auto-generated method stub
+		
     	try (Scanner scanner = new Scanner(new File(csvFile))) {
     		scanner.nextLine(); //skips the header.
     		
     		//loop through each line.
     		while( scanner.hasNext()) {
     			String[] data = scanner.nextLine().split(",");
+    			// is the line or row has 8 fields of elements? the 8th collumn of each line. 
     			if (data.length >= 8 && data[7].equals(email)) {
-                    return true;
+                    return true; //return true if the data or the line is length of 8 and has 
                 }
             }
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this, "Error reading CSV: " + e.getMessage(), "File Error", JOptionPane.ERROR_MESSAGE);
         }
-        return false;
+        return false; //return false if the email is unique
     }
 
 
@@ -238,7 +253,10 @@ public class CreateUser extends JFrame {
         return false;
     }
     
-    //this method validates if its double. or converts it into a double variable from string.
+    
+    
+    //this method  or converts it into a double variable from string. //this will be used in validation part above.
+    //This method checks whether a given string is a valid double
     private boolean isValidDouble(String value) {
         try {
             Double.parseDouble(value);
@@ -249,7 +267,7 @@ public class CreateUser extends JFrame {
     }
 
     
-    //this method clears all the textfield.
+    //this method clears all the textfield in everything. called afeter user is successfully created.
     private void clearFields() {
         userNameTextField.setText("");
         passWordTextField.setText("");
